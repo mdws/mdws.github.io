@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack --watch"
+  },
+  "devDependencies": {
+    "elm-webpack-loader": "^3.0.6",
+    "webpack": "^1.13.3"
+  }
+}
