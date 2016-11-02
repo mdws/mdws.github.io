@@ -1,10 +1,17 @@
 {
   "scripts": {
-    "build": "webpack",
-    "build:watch": "webpack --watch"
+    "build": "gulp --type=prod",
+    "build:watch": "gulp watch",
+    "precommit": "npm run build; git add dist/"
   },
   "devDependencies": {
-    "elm-webpack-loader": "^3.0.6",
-    "webpack": "^1.13.3"
+    "browser-sync": "^2.17.5",
+    "gulp": "^3.9.1",
+    "gulp-elm": "^0.5.0",
+    "gulp-postcss": "^6.2.0",
+    "gulp-uglify": "^2.0.0",
+    "husky": "^0.11.9",
+    "postcss-cssnext": "^2.8.0",
+    "postcss-import": "^8.1.2"
   }
 }
