@@ -29,7 +29,7 @@ gulp.task('css', () => {
     cssnext({ browsers: ['last 2 versions'] }),
   ];
 
-  return gulp.src('src/css/**/*.css')
+  return gulp.src('src/css/main.css')
     .pipe(postcss(processors))
     .pipe(gulp.dest('dist/css'));
 });
