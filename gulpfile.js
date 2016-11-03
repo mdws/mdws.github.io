@@ -18,7 +18,7 @@ const withReload = (...tasks) => [...tasks, browserSync.reload];
  */
 gulp.task('elm', () => {
   return gulp.src('src/elm/Main.elm')
-    .pipe(elm.bundle('bundle.js'))
+    .pipe(elm.bundle('bundle.js', { warn: true })).on('error', gutil.log)
     .pipe(onlyProd(uglify()))
     .pipe(gulp.dest('dist/js'));
 });
