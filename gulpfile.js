@@ -40,7 +40,7 @@ gulp.task('watch', () => {
     server: { baseDir: './' },
   });
 
-  gulp.watch('index.html', withReload());
+  gulp.watch('index.html', browserSync.reload);
   gulp.watch('src/elm/**/*.elm', withReload('elm'));
   gulp.watch('src/css/**/*.css', withReload('css'));
 });

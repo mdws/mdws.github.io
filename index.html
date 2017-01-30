@@ -5,9 +5,16 @@
   <link rel="stylesheet" type="text/css" href="dist/css/main.css">
 </head>
 <body>
+  <div id="app"></div>
   <script src="dist/js/bundle.js"></script>
   <script type="text/javascript">
-    Elm.Main.fullscreen();
+    (function () {
+      var app = Elm.Main.embed(document.getElementById('app'));
+
+      app.ports.downloadRedirect.subscribe(function (newLocation) {
+        window.location = newLocation;
+      });
+    }());
   </script>
 </body>
 </html>
