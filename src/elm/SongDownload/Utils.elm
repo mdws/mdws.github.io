@@ -25,4 +25,5 @@ isBandcamp : String -> Bool
 isBandcamp = String.endsWith "bandcamp.com"
 
 isYouTube : String -> Bool
-isYouTube = String.endsWith "youtube.com"
+isYouTube host =
+  String.endsWith "youtube.com" host || String.endsWith "youtu.be" host
