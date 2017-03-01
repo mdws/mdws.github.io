@@ -8,7 +8,7 @@ import Components.SongDownload.Models exposing (SongDownload, SongData)
 import Components.SongDownload.Messages exposing (Msg(..))
 
 apiUrl : String
-apiUrl = "https://mdws.herokuapp.com/api/v1/services"
+apiUrl = "https://mdws.herokuapp.com/api/v1"
 
 dataDecoder : Decoder SongData
 dataDecoder =
