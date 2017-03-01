@@ -8,13 +8,7 @@
   <div id="app"></div>
   <script src="dist/js/bundle.js"></script>
   <script type="text/javascript">
-    (function () {
-      var app = Elm.Main.embed(document.getElementById('app'));
-
-      app.ports.downloadRedirect.subscribe(function (newLocation) {
-        window.location = newLocation;
-      });
-    }());
+    Elm.Main.embed(document.getElementById('app'));
   </script>
 </body>
 </html>

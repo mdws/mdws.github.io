@@ -2,12 +2,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
-import SongDownload.Commands
-import SongDownload.Messages
-import SongDownload.Models as SongDownload
-import SongDownload.Update
-import SongDownload.Utils
-import SongDownload.View
+import Components.SongDownload as SongDownload
 
 main : Program Never Model Msg
 main =
@@ -22,7 +17,7 @@ main =
 
 type alias Model =
   { url : String
-  , songs : List SongDownload.SongDownload
+  , songs : List SongDownload.Model
   , error : Maybe String
   }
 
@@ -40,47 +35,26 @@ init =
 -- UPDATE
 
 type Msg
-  = NewDownload
+  = AddDownload
   | UpdateUrl String
-  | SongDownloadMsg SongDownload.SongDownload SongDownload.Messages.Msg
+  | SongDownloadMsg SongDownload.Model SongDownload.Msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    UpdateUrl newUrl ->
-      ({ model | url = newUrl }, Cmd.none)
+    UpdateUrl url ->
+      ({ model | url = url }, Cmd.none)
 
-    NewDownload ->
-      let
-        resultKind =
-          SongDownload.Utils.getKind model.url
-
-        (newModel, subCmd) =
-          case resultKind of
-            Ok kind ->
-              let
-                song =
-                  SongDownload.new (List.length model.songs) model.url kind
-
-                newModel =
-                  { url = ""
-                  , songs = song :: model.songs
-                  , error = Nothing
-                  }
-              in
-                ( newModel
-                , Cmd.map (SongDownloadMsg song) (SongDownload.Commands.download song)
-                )
-
-            Err error ->
-              ({ model | error = Just error }, Cmd.none)
-      in
-        (newModel, subCmd)
+    AddDownload ->
+      model.url
+        |> SongDownload.new (List.length model.songs)
+        |> handleSongResult model
 
     SongDownloadMsg songModel songMsg ->
       let
         (newSong, songCmd) =
-          SongDownload.Update.update songMsg songModel
+          SongDownload.update songMsg songModel
+
         newSongs =
           List.map
             (\song ->
@@ -94,25 +68,47 @@ update msg model =
         , Cmd.map (SongDownloadMsg newSong) songCmd
         )
 
+handleSongResult : Model -> Result String SongDownload.Model -> (Model, Cmd Msg)
+handleSongResult model songResult =
+  case songResult of
+    Ok song ->
+      let
+        newModel =
+          { url = ""
+          , songs = song :: model.songs
+          , error = Nothing
+          }
+
+        subCmd =
+          song
+            |> SongDownload.fetch
+            |> Cmd.map (SongDownloadMsg song)
+      in
+        (newModel, subCmd)
+
+    Err error ->
+      ({ model | error = Just error }, Cmd.none)
+
 -- VIEW
 
 view : Model -> Html Msg
 view model =
   div []
-    [ Html.form [ onSubmit NewDownload ]
-        [ input [ type_ "text", value model.url, onInput UpdateUrl ] []
-        , button [ type_ "submit" ] [ text "Download" ]
-        ]
+    [ Html.form [ onSubmit AddDownload ]
+      [ input [ type_ "text", value model.url, onInput UpdateUrl ] []
+      ]
     , songList model.songs
     , p [] [ text (toString model) ]
     ]
 
-songList : List SongDownload.SongDownload -> Html Msg
+songList : List SongDownload.Model -> Html Msg
 songList songs =
   songs
     |> List.map
         (\song ->
-          Html.map (SongDownloadMsg song) (SongDownload.View.view song)
+          Html.map
+            (SongDownloadMsg song)
+            (SongDownload.view song)
         )
     |> ul []
 

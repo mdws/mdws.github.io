@@ -1,7 +1,7 @@
-module SongDownload.Utils exposing (..)
+module Components.SongDownload.Utils exposing (..)
 
 import Erl
-import SongDownload.Models exposing (DownloadKind(..))
+import Components.SongDownload.Models exposing (DownloadKind(..))
 
 getKind : String -> Result String DownloadKind
 getKind url =
