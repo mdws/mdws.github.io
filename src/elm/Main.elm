@@ -96,6 +96,7 @@ view model =
   div []
     [ Html.form [ onSubmit AddDownload ]
       [ input [ type_ "text", value model.url, onInput UpdateUrl ] []
+      , button [ type_ "submit" ] [ text "Download" ]
       ]
     , songList model.songs
     , p [] [ text (toString model) ]
