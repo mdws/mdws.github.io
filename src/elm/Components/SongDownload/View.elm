@@ -58,16 +58,16 @@ songStatusView song =
     statusDiv =
       case song.status of
         Completed ->
-          div [ class "button is-disabled is-inverted is-success", style buttonStyle ]
+          button [ class "button is-disabled is-inverted is-success", style buttonStyle ]
             [ span [ class "icon" ] [ i [ class "fa fa-check" ] [] ]
             ]
 
         Errored _ ->
-          div [ class "button is-disabled is-inverted is-danger", style buttonStyle ]
+          button [ class "button is-disabled is-inverted is-danger", style buttonStyle ]
             [ span [ class "icon" ] [ i [ class "fa fa-close" ] [] ]
             ]
 
         _ ->
-          div [ class "button is-white is-loading", style buttonStyle ] []
+          button [ class "button is-loading is-light", style buttonStyle ] []
   in
     div [ class "media-right" ] [ statusDiv ]
