@@ -93,14 +93,55 @@ handleSongResult model songResult =
 
 view : Model -> Html Msg
 view model =
-  div []
-    [ Html.form [ onSubmit AddDownload ]
-      [ input [ type_ "text", value model.url, onInput UpdateUrl ] []
-      , button [ type_ "submit" ] [ text "Download" ]
+  div [ class "container" ]
+    [ section [ class "hero is-medium" ]
+      [ div [ class "hero-body" ]
+        [ div [ class "container" ]
+          [ h1 [ class "title has-text-centered" ] [ text "paste some track or playlist url" ]
+          , formContainer model
+          ]
+        ]
       ]
-    , songList model.songs
-    , p [] [ text (toString model) ]
+    , hr [] []
+    , section [ class "section" ]
+      [ div [ class "container" ]
+        [ div [ class "heading", style [("margin-bottom", "3rem")] ]
+          [ h1 [ class "title is-4 has-text-centered" ] [ text "Downloads" ] ]
+        , songList model.songs
+        ]
+      ]
     ]
+
+formContainer : Model -> Html Msg
+formContainer model =
+  let
+    (helperClass, helperText) =
+      case model.error of
+        Just error ->
+          ("is-danger", error)
+
+        Nothing ->
+          ("", "Available services: YouTube, SoundCloud, Bandcamp")
+  in
+    div [ class "columns" ]
+      [ div [ class "column is-half is-offset-one-quarter" ]
+        [ Html.form [ class "control has-addons has-addons-centered", onSubmit AddDownload ]
+          [ input
+            [ class ("input " ++ helperClass)
+            , style [("width", "70%")]
+            , type_ "text"
+            , value model.url
+            , onInput UpdateUrl
+            ] []
+          , button [ class "button", type_ "submit" ]
+            [ span [ class "icon" ] [ i [ class "fa fa-download" ] [] ]
+            ]
+          ]
+          , span [ class ("help has-text-centered " ++ helperClass) ]
+            [ text helperText
+            ]
+        ]
+      ]
 
 songList : List SongDownload.Model -> Html Msg
 songList songs =
@@ -111,7 +152,7 @@ songList songs =
             (SongDownloadMsg song)
             (SongDownload.view song)
         )
-    |> ul []
+    |> div []
 
 -- SUBSCRIPTIONS
 

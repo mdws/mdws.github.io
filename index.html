@@ -5,7 +5,26 @@
   <link rel="stylesheet" type="text/css" href="dist/css/main.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div class="container">
+    <nav class="nav has-shadow">
+      <div class="container is-fluid">
+        <div class="nav-left">
+          <a class="nav-item">
+            <i class="fa fa-music"></i>
+          </a>
+        </div>
+        <div class="nav-center">
+          <a class="nav-item is-active" href="#">
+            Home
+          </a>
+          <a class="nav-item" href="https://github.com/mdws" target="_blank">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div id="app"></div>
+  </div>
   <script src="dist/js/bundle.js"></script>
   <script type="text/javascript">
     Elm.Main.embed(document.getElementById('app'));

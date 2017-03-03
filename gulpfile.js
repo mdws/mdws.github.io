@@ -2,9 +2,9 @@ const gulp = require('gulp');
 const gutil = require('gulp-util');
 const elm = require('gulp-elm');
 const uglify = require('gulp-uglify');
-const postcss = require('gulp-postcss');
-const cssnext = require('postcss-cssnext');
-const atImport = require('postcss-import');
+const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
+const copy = require('gulp-copy');
 const browserSync = require('browser-sync').create();
 
 /**
@@ -24,13 +24,23 @@ gulp.task('elm', () => {
 });
 
 gulp.task('css', () => {
-  const processors = [
-    atImport(),
-    cssnext({ browsers: ['last 2 versions'] }),
-  ];
+  gulp.src([
+    'node_modules/font-awesome/fonts/*',
+  ]).pipe(copy('dist/fonts', {
+    prefix: 3,
+  }));
 
-  return gulp.src('src/css/main.css')
-    .pipe(postcss(processors))
+  return gulp.src('src/scss/main.scss')
+    .pipe(sass({
+      outputStyle: gutil.env.type == 'prod' ? 'compressed' : 'nested',
+      includePaths: [
+        'node_modules/bulma',
+        'node_modules/font-awesome/scss',
+      ],
+    }).on('error', sass.logError))
+    .pipe(onlyProd(autoprefixer({
+      browsers: ['last 2 versions'],
+    })))
     .pipe(gulp.dest('dist/css'));
 });
 
@@ -42,7 +52,7 @@ gulp.task('watch', () => {
 
   gulp.watch('index.html', browserSync.reload);
   gulp.watch('src/elm/**/*.elm', withReload('elm'));
-  gulp.watch('src/css/**/*.css', withReload('css'));
+  gulp.watch('src/scss/**/*.scss', withReload('css'));
 });
 
 gulp.task('default', ['elm', 'css']);
