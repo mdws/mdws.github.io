@@ -1,7 +1,7 @@
 module Components.SongDownload.Commands exposing (..)
 
 import Http
-import Json.Decode exposing (Decoder, field, string, int, nullable)
+import Json.Decode exposing (Decoder, field, string, float, nullable)
 import Json.Decode.Pipeline exposing (decode, required)
 
 import Components.SongDownload.Models exposing (SongDownload, SongData)
@@ -16,7 +16,7 @@ dataDecoder =
     |> required "title" string
     |> required "user" string
     |> required "artwork" (nullable string)
-    |> required "duration" int
+    |> required "duration" float
     |> required "data" string
 
 fetchInfo : SongDownload -> Cmd Msg

@@ -14,7 +14,7 @@ type alias SongData =
   { title : String
   , user : String
   , artwork : Maybe String
-  , duration : Int
+  , duration : Float
   , payload : String
   }
 
